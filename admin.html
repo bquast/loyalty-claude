@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - The Flying Dutchman</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .admin-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .scanner-section {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        
+        .manual-input {
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 2px solid var(--border);
+        }
+        
+        .points-buttons {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .points-btn {
+            padding: 15px;
+            border: 2px solid var(--primary);
+            background: white;
+            color: var(--primary);
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .points-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .points-btn.negative {
+            border-color: var(--error);
+            color: var(--error);
+        }
+        
+        .points-btn.negative:hover {
+            background: var(--error);
+            color: white;
+        }
+        
+        .customer-info {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .customer-info h3 {
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+        
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .info-row:last-child {
+            border-bottom: none;
+        }
+        
+        .info-label {
+            font-weight: 600;
+            color: var(--text-light);
+        }
+        
+        .transaction-history {
+            margin-top: 20px;
+        }
+        
+        .transaction {
+            padding: 12px;
+            background: white;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .transaction.positive {
+            border-left: 4px solid var(--success);
+        }
+        
+        .transaction.negative {
+            border-left: 4px solid var(--error);
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 16px 24px;
+            background: var(--success);
+            color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            animation: slideIn 0.3s;
+            z-index: 1000;
+        }
+        
+        .notification.error {
+            background: var(--error);
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <header style="text-align: center; color: white; padding: 40px 0 30px;">
+            <h1>⚓ Admin Panel</h1>
+            <p>The Flying Dutchman Loyalty System</p>
+        </header>
+
+        <div class="scanner-section">
+            <h2>Scan Loyalty Card</h2>
+            <p>Scan the customer's QR code or enter their card number manually</p>
+            
+            <div id="customerInfo" style="display: none;">
+                <div class="customer-info">
+                    <h3>Customer Information</h3>
+                    <div class="info-row">
+                        <span class="info-label">Name:</span>
+                        <span id="customerName">-</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Email:</span>
+                        <span id="customerEmail">-</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Current Points:</span>
+                        <strong id="customerPoints">0</strong>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Member Since:</span>
+                        <span id="memberSince">-</span>
+                    </div>
+                </div>
+
+                <h3>Add Points</h3>
+                <div class="points-buttons">
+                    <button class="points-btn" onclick="addPoints(1)">+1</button>
+                    <button class="points-btn" onclick="addPoints(5)">+5</button>
+                    <button class="points-btn" onclick="addPoints(10)">+10</button>
+                    <button class="points-btn negative" onclick="addPoints(-1)">-1</button>
+                    <button class="points-btn negative" onclick="addPoints(-5)">-5</button>
+                    <button class="points-btn negative" onclick="addPoints(-10)">-10</button>
+                </div>
+
+                <div class="transaction-history">
+                    <h3>Recent Transactions</h3>
+                    <div id="transactionList"></div>
+                </div>
+
+                <button class="btn btn-secondary" onclick="clearCustomer()" style="margin-top: 20px;">
+                    Clear & Scan New Customer
+                </button>
+            </div>
+
+            <div class="manual-input">
+                <h3>Manual Entry</h3>
+                <div class="input-group">
+                    <label for="serialNumber">Card Number</label>
+                    <input type="text" id="serialNumber" placeholder="Enter card number or scan QR">
+                </div>
+                <button class="btn btn-primary" onclick="lookupCustomer()">
+                    Look Up Customer
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="admin.js"></script>
+</body>
+</html>
